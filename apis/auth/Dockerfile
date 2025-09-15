@@ -1,12 +1,26 @@
-FROM node:18-alpine
+FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
+# Copy package.json and install dependencies
 COPY package*.json ./
-RUN npm install
 
+# Install all dependencies (dev for dev mode)
+ARG NODE_ENV=development
+RUN if [ "$NODE_ENV" = "development" ]; then npm install; else npm install --production; fi
+
+# Copy source code
 COPY . .
 
+# Expose port
 EXPOSE 3000
 
-CMD ["npm", "start"]
+# Default environment
+ENV NODE_ENV=development
+
+# Run command based on NODE_ENV
+CMD if [ "$NODE_ENV" = "development" ]; then \
+        npm run dev; \
+    else \
+        npm run build && npm run start; \
+    fi

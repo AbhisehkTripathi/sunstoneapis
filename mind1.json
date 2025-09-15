@@ -1,0 +1,307 @@
+{
+  "info": {
+    "name": "Mental Health Platform APIs",
+    "description": "Postman collection for Auth, Community, Wellness, Care, and Progress services.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b4b1a1b6-3f9e-4a32-9876-9c3b92e5e91f"
+  },
+  "item": [
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api", "auth", "register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"patient\"\n}"
+            }
+          },
+          "response": [{ "code": 201, "body": "{ \"message\": \"User registered successfully\", \"userId\": 1 }" }]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api", "auth", "login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"password123\"\n}"
+            }
+          },
+          "response": [{ "code": 200, "body": "{ \"accessToken\": \"jwt-token\", \"refreshToken\": \"refresh-token\" }" }]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{refresh_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/refresh", "host": ["{{base_url}}"], "path": ["api", "auth", "refresh"] }
+          },
+          "response": [{ "code": 200, "body": "{ \"accessToken\": \"new-jwt-token\" }" }]
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/logout", "host": ["{{base_url}}"], "path": ["api", "auth", "logout"] }
+          },
+          "response": [{ "code": 200, "body": "{ \"message\": \"Logged out successfully\" }" }]
+        },
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/me", "host": ["{{base_url}}"], "path": ["api", "auth", "me"] }
+          }
+        },
+        {
+          "name": "Update My Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/me", "host": ["{{base_url}}"], "path": ["api", "auth", "me"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Users (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/users", "host": ["{{base_url}}"], "path": ["api", "auth", "users"] }
+          }
+        },
+        {
+          "name": "Get User Details",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/users/1", "host": ["{{base_url}}"], "path": ["api", "auth", "users", "1"] }
+          }
+        },
+        {
+          "name": "Change User Role (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/users/1/role", "host": ["{{base_url}}"], "path": ["api", "auth", "users", "1", "role"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"therapist\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete User (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/users/1", "host": ["{{base_url}}"], "path": ["api", "auth", "users", "1"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Community Service",
+      "item": [
+        {
+          "name": "List Posts",
+          "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/community/posts", "host": ["{{base_url}}"], "path": ["api", "community", "posts"] } }
+        },
+        {
+          "name": "Create Post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/community/posts", "host": ["{{base_url}}"], "path": ["api", "community", "posts"] },
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"My Journey\",\n  \"content\": \"This is my story.\"\n}" }
+          }
+        },
+        {
+          "name": "Get Post by ID",
+          "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/community/posts/1", "host": ["{{base_url}}"], "path": ["api", "community", "posts", "1"] } }
+        },
+        {
+          "name": "Update Post",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/community/posts/1", "host": ["{{base_url}}"], "path": ["api", "community", "posts", "1"] },
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Updated content.\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/community/posts/1", "host": ["{{base_url}}"], "path": ["api", "community", "posts", "1"] }
+          }
+        },
+        {
+          "name": "Add Comment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/community/posts/1/comments", "host": ["{{base_url}}"], "path": ["api", "community", "posts", "1", "comments"] },
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"This is a comment.\"\n}" }
+          }
+        },
+        {
+          "name": "List Comments",
+          "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/community/posts/1/comments", "host": ["{{base_url}}"], "path": ["api", "community", "posts", "1", "comments"] } }
+        },
+        {
+          "name": "Update Comment",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/community/comments/1", "host": ["{{base_url}}"], "path": ["api", "community", "comments", "1"] },
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"Updated comment\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/community/comments/1", "host": ["{{base_url}}"], "path": ["api", "community", "comments", "1"] }
+          }
+        },
+        {
+          "name": "Like/Unlike Post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/community/posts/1/like", "host": ["{{base_url}}"], "path": ["api", "community", "posts", "1", "like"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Wellness Service",
+      "item": [
+        { "name": "List Activities", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/wellness/activities", "host": ["{{base_url}}"], "path": ["api", "wellness", "activities"] } } },
+        {
+          "name": "Add Activity",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/wellness/activities", "host": ["{{base_url}}"], "path": ["api", "wellness", "activities"] },
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Meditation\",\n  \"description\": \"Morning meditation session\"\n}" }
+          }
+        },
+        {
+          "name": "Update Activity",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/wellness/activities/1", "host": ["{{base_url}}"], "path": ["api", "wellness", "activities", "1"] },
+            "body": { "mode": "raw", "raw": "{\n  \"description\": \"Updated activity\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Activity",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/wellness/activities/1", "host": ["{{base_url}}"], "path": ["api", "wellness", "activities", "1"] }
+          }
+        },
+        { "name": "Get Activity Details", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/wellness/activities/1", "host": ["{{base_url}}"], "path": ["api", "wellness", "activities", "1"] } } },
+        { "name": "Get Tips", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/wellness/tips", "host": ["{{base_url}}"], "path": ["api", "wellness", "tips"] } } },
+        { "name": "Get Music", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/wellness/music", "host": ["{{base_url}}"], "path": ["api", "wellness", "music"] } } }
+      ]
+    },
+
+    {
+      "name": "Care Service",
+      "item": [
+        { "name": "List Doctors", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/care/doctors", "host": ["{{base_url}}"], "path": ["api", "care", "doctors"] } } },
+        { "name": "Doctor Profile", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/care/doctors/1", "host": ["{{base_url}}"], "path": ["api", "care", "doctors", "1"] } } },
+        {
+          "name": "Book Appointment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/care/appointments", "host": ["{{base_url}}"], "path": ["api", "care", "appointments"] },
+            "body": { "mode": "raw", "raw": "{\n  \"doctorId\": 1,\n  \"date\": \"2025-09-15\",\n  \"time\": \"10:00 AM\"\n}" }
+          }
+        },
+        {
+          "name": "My Appointments",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }], "url": { "raw": "{{base_url}}/api/care/appointments", "host": ["{{base_url}}"], "path": ["api", "care", "appointments"] } }
+        },
+        {
+          "name": "Cancel Appointment",
+          "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }], "url": { "raw": "{{base_url}}/api/care/appointments/1/cancel", "host": ["{{base_url}}"], "path": ["api", "care", "appointments", "1", "cancel"] } }
+        },
+        {
+          "name": "Complete Appointment",
+          "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }], "url": { "raw": "{{base_url}}/api/care/appointments/1/complete", "host": ["{{base_url}}"], "path": ["api", "care", "appointments", "1", "complete"] } }
+        },
+        {
+          "name": "Add Prescription",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/care/prescriptions", "host": ["{{base_url}}"], "path": ["api", "care", "prescriptions"] },
+            "body": { "mode": "raw", "raw": "{\n  \"userId\": 1,\n  \"medications\": [\"Medicine A\", \"Medicine B\"]\n}" }
+          }
+        },
+        {
+          "name": "Get Prescriptions",
+          "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }], "url": { "raw": "{{base_url}}/api/care/prescriptions/1", "host": ["{{base_url}}"], "path": ["api", "care", "prescriptions", "1"] } }
+        }
+      ]
+    },
+
+    {
+      "name": "Progress Service",
+      "item": [
+        { "name": "Get Progress Summary", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/progress/user/1", "host": ["{{base_url}}"], "path": ["api", "progress", "user", "1"] } } },
+        {
+          "name": "Add Progress Entry",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }, { "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/progress/user/1/entries", "host": ["{{base_url}}"], "path": ["api", "progress", "user", "1", "entries"] },
+            "body": { "mode": "raw", "raw": "{\n  \"mood\": \"happy\",\n  \"notes\": \"Feeling better today\"\n}" }
+          }
+        },
+        { "name": "List Progress Entries", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/progress/user/1/entries", "host": ["{{base_url}}"], "path": ["api", "progress", "user", "1", "entries"] } } },
+        {
+          "name": "Update Progress Entry",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }],
+            "url": { "raw": "{{base_url}}/api/progress/user/1/entries/1", "host": ["{{base_url}}"], "path": ["api", "progress", "user", "1", "entries", "1"] },
+            "body": { "mode": "raw", "raw": "{\n  \"mood\": \"neutral\"\n}" }
+          }
+        },
+        {
+          "name": "Delete Progress Entry",
+          "request": { "method": "DELETE", "header": [{ "key": "Authorization", "value": "Bearer {{access_token}}" }], "url": { "raw": "{{base_url}}/api/progress/user/1/entries/1", "host": ["{{base_url}}"], "path": ["api", "progress", "user", "1", "entries", "1"] } }
+        },
+        { "name": "Generate Report", "request": { "method": "GET", "url": { "raw": "{{base_url}}/api/progress/reports/1", "host": ["{{base_url}}"], "path": ["api", "progress", "reports", "1"] } } }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000" },
+    { "key": "access_token", "value": "" },
+    { "key": "refresh_token", "value": "" }
+  ]
+}

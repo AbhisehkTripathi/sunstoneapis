@@ -1,0 +1,1830 @@
+{
+  "info": {
+    "name": "Mental Health Platform API",
+    "description": "Complete API collection for mental health platform services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth Service",
+      "description": "Authentication and user management",
+      "item": [
+        {
+          "name": "POST /register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"role\": \"patient\",\n  \"dateOfBirth\": \"1990-01-01\",\n  \"phone\": \"+1234567890\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/register",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "register"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"User registered successfully\",\n  \"user\": {\n    \"id\": \"user_id\",\n    \"email\": \"user@example.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"patient\"\n  },\n  \"token\": \"jwt_token_here\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/login",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "login"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Login successful\",\n  \"user\": {\n    \"id\": \"user_id\",\n    \"email\": \"user@example.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"patient\"\n  },\n  \"token\": \"jwt_token_here\",\n  \"refreshToken\": \"refresh_token_here\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /refresh",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"refresh_token_here\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "refresh"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/refresh",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "refresh"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"token\": \"new_jwt_token_here\",\n  \"refreshToken\": \"new_refresh_token_here\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/logout",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "logout"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Logout successful\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/me",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "me"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"user\": {\n    \"id\": \"user_id\",\n    \"email\": \"user@example.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"patient\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"phone\": \"+1234567890\",\n    \"createdAt\": \"2024-01-01T00:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /me",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John Updated\",\n  \"phone\": \"+0987654321\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "me"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/me",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "me"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Profile updated successfully\",\n  \"user\": {\n    \"id\": \"user_id\",\n    \"email\": \"user@example.com\",\n    \"firstName\": \"John Updated\",\n    \"lastName\": \"Doe\",\n    \"role\": \"patient\",\n    \"phone\": \"+0987654321\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /users (Admin only)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "users"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "users"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"users\": [\n    {\n      \"id\": \"user1\",\n      \"email\": \"patient1@example.com\",\n      \"firstName\": \"Alice\",\n      \"lastName\": \"Smith\",\n      \"role\": \"patient\"\n    },\n    {\n      \"id\": \"user2\",\n      \"email\": \"therapist1@example.com\",\n      \"firstName\": \"Bob\",\n      \"lastName\": \"Johnson\",\n      \"role\": \"therapist\"\n    }\n  ],\n  \"total\": 2,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /users/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/users/user_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "users", "user_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/user_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "users", "user_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"user\": {\n    \"id\": \"user_id\",\n    \"email\": \"user@example.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"role\": \"patient\",\n    \"dateOfBirth\": \"1990-01-01\",\n    \"phone\": \"+1234567890\",\n    \"createdAt\": \"2024-01-01T00:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /users/:id/role (Admin only)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"therapist\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/users/user_id/role",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "users", "user_id", "role"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/user_id/role",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "users", "user_id", "role"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"User role updated successfully\",\n  \"user\": {\n    \"id\": \"user_id\",\n    \"email\": \"user@example.com\",\n    \"role\": \"therapist\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /users/:id (Admin only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/users/user_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "users", "user_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/auth/users/user_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "auth", "users", "user_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"User deleted successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Community Service",
+      "description": "Social interaction, posts, and comments",
+      "item": [
+        {
+          "name": "GET /posts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/community/posts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"posts\": [\n    {\n      \"id\": \"post1\",\n      \"title\": \"My Journey\",\n      \"content\": \"Sharing my mental health journey...\",\n      \"author\": {\n        \"id\": \"user1\",\n        \"firstName\": \"Alice\",\n        \"lastName\": \"Smith\"\n      },\n      \"likes\": 5,\n      \"comments\": 3,\n      \"createdAt\": \"2024-01-01T10:00:00.000Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /posts",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My Mental Health Journey\",\n  \"content\": \"I want to share my experience with anxiety...\",\n  \"tags\": [\"anxiety\", \"recovery\", \"support\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/community/posts",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Post created successfully\",\n  \"post\": {\n    \"id\": \"new_post_id\",\n    \"title\": \"My Mental Health Journey\",\n    \"content\": \"I want to share my experience with anxiety...\",\n    \"author\": {\n      \"id\": \"user_id\",\n      \"firstName\": \"John\",\n      \"lastName\": \"Doe\"\n    },\n    \"tags\": [\"anxiety\", \"recovery\", \"support\"],\n    \"createdAt\": \"2024-01-01T12:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /posts/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/community/posts/post_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts", "post_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts/post_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts", "post_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"post\": {\n    \"id\": \"post_id\",\n    \"title\": \"My Mental Health Journey\",\n    \"content\": \"I want to share my experience with anxiety...\",\n    \"author\": {\n      \"id\": \"user_id\",\n      \"firstName\": \"John\",\n      \"lastName\": \"Doe\"\n    },\n    \"tags\": [\"anxiety\", \"recovery\", \"support\"],\n    \"likes\": 0,\n    \"comments\": 0,\n    \"createdAt\": \"2024-01-01T12:00:00.000Z\",\n    \"updatedAt\": \"2024-01-01T12:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /posts/:id",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Title\",\n  \"content\": \"Updated content...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/community/posts/post_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts", "post_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts/post_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts", "post_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Post updated successfully\",\n  \"post\": {\n    \"id\": \"post_id\",\n    \"title\": \"Updated Title\",\n    \"content\": \"Updated content...\",\n    \"updatedAt\": \"2024-01-01T12:30:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /posts/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/community/posts/post_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts", "post_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts/post_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts", "post_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Post deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /posts/:id/comments",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"This is a great post! Thank you for sharing.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/community/posts/post_id/comments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts", "post_id", "comments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts/post_id/comments",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts", "post_id", "comments"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Comment added successfully\",\n  \"comment\": {\n    \"id\": \"comment_id\",\n    \"content\": \"This is a great post! Thank you for sharing.\",\n    \"author\": {\n      \"id\": \"user_id\",\n      \"firstName\": \"John\",\n      \"lastName\": \"Doe\"\n    },\n    \"postId\": \"post_id\",\n    \"createdAt\": \"2024-01-01T13:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /posts/:id/comments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/community/posts/post_id/comments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts", "post_id", "comments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts/post_id/comments",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts", "post_id", "comments"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"comments\": [\n    {\n      \"id\": \"comment1\",\n      \"content\": \"This is a great post!\",\n      \"author\": {\n        \"id\": \"user2\",\n        \"firstName\": \"Alice\",\n        \"lastName\": \"Smith\"\n      },\n      \"createdAt\": \"2024-01-01T12:30:00.000Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /comments/:id",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated comment content\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/community/comments/comment_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "comments", "comment_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/community/comments/comment_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "comments", "comment_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Comment updated successfully\",\n  \"comment\": {\n    \"id\": \"comment_id\",\n    \"content\": \"Updated comment content\",\n    \"updatedAt\": \"2024-01-01T13:30:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /comments/:id",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/community/comments/comment_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "comments", "comment_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/community/comments/comment_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "comments", "comment_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Comment deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /posts/:id/like",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/community/posts/post_id/like",
+              "host": ["{{base_url}}"],
+              "path": ["api", "community", "posts", "post_id", "like"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/community/posts/post_id/like",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "community", "posts", "post_id", "like"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Post liked successfully\",\n  \"likes\": 1\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Wellness Service",
+      "description": "Wellness programs, activities, and resources",
+      "item": [
+        {
+          "name": "GET /activities",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wellness/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "activities"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/activities",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "activities"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"activities\": [\n    {\n      \"id\": \"activity1\",\n      \"title\": \"Morning Meditation\",\n      \"description\": \"Guided morning meditation session\",\n      \"duration\": 15,\n      \"category\": \"meditation\",\n      \"difficulty\": \"beginner\"\n    },\n    {\n      \"id\": \"activity2\",\n      \"title\": \"Breathing Exercises\",\n      \"description\": \"Deep breathing techniques for relaxation\",\n      \"duration\": 10,\n      \"category\": \"breathing\",\n      \"difficulty\": \"beginner\"\n    }\n  ],\n  \"total\": 2,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /activities (Therapist/Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Evening Yoga\",\n  \"description\": \"Relaxing yoga session for evening\",\n  \"duration\": 30,\n  \"category\": \"yoga\",\n  \"difficulty\": \"intermediate\",\n  \"instructions\": \"Step by step instructions...\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wellness/activities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "activities"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/activities",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "activities"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Activity created successfully\",\n  \"activity\": {\n    \"id\": \"new_activity_id\",\n    \"title\": \"Evening Yoga\",\n    \"description\": \"Relaxing yoga session for evening\",\n    \"duration\": 30,\n    \"category\": \"yoga\",\n    \"difficulty\": \"intermediate\",\n    \"createdBy\": \"therapist_id\",\n    \"createdAt\": \"2024-01-01T14:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /activities/:id (Therapist/Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Yoga Session\",\n  \"duration\": 45\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/wellness/activities/activity_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "activities", "activity_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/activities/activity_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "activities", "activity_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Activity updated successfully\",\n  \"activity\": {\n    \"id\": \"activity_id\",\n    \"title\": \"Updated Yoga Session\",\n    \"duration\": 45,\n    \"updatedAt\": \"2024-01-01T14:30:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /activities/:id (Admin only)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wellness/activities/activity_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "activities", "activity_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/activities/activity_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "activities", "activity_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Activity deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /activities/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wellness/activities/activity_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "activities", "activity_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/activities/activity_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "activities", "activity_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"activity\": {\n    \"id\": \"activity_id\",\n    \"title\": \"Morning Meditation\",\n    \"description\": \"Guided morning meditation session\",\n    \"duration\": 15,\n    \"category\": \"meditation\",\n    \"difficulty\": \"beginner\",\n    \"instructions\": \"Find a quiet space...\",\n    \"createdBy\": \"therapist_id\",\n    \"createdAt\": \"2024-01-01T10:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /tips",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wellness/tips",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "tips"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/tips",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "tips"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"tips\": [\n    {\n      \"id\": \"tip1\",\n      \"content\": \"Take deep breaths when feeling anxious\",\n      \"category\": \"anxiety\",\n      \"date\": \"2024-01-01\"\n    },\n    {\n      \"id\": \"tip2\",\n      \"content\": \"Practice gratitude daily\",\n      \"category\": \"mindfulness\",\n      \"date\": \"2024-01-02\"\n    }\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /music",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/wellness/music",
+              "host": ["{{base_url}}"],
+              "path": ["api", "wellness", "music"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/wellness/music",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "wellness", "music"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"music\": [\n    {\n      \"id\": \"music1\",\n      \"title\": \"Calming Ocean Waves\",\n      \"description\": \"Relaxing ocean sounds\",\n      \"duration\": 1800,\n      \"category\": \"nature\",\n      \"url\": \"/audio/ocean-waves.mp3\"\n    },\n    {\n      \"id\": \"music2\",\n      \"title\": \"Guided Meditation\",\n      \"description\": \"20-minute guided meditation\",\n      \"duration\": 1200,\n      \"category\": \"meditation\",\n      \"url\": \"/audio/guided-meditation.mp3\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Care Service",
+      "description": "Appointments, doctors, and healthcare management",
+      "item": [
+        {
+          "name": "GET /doctors",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/care/doctors",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "doctors"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/care/doctors",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "doctors"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"doctors\": [\n    {\n      \"id\": \"doctor1\",\n      \"firstName\": \"Sarah\",\n      \"lastName\": \"Wilson\",\n      \"specialization\": \"Clinical Psychology\",\n      \"availability\": [\"Monday\", \"Wednesday\", \"Friday\"],\n      \"rating\": 4.8\n    },\n    {\n      \"id\": \"doctor2\",\n      \"firstName\": \"Michael\",\n      \"lastName\": \"Chen\",\n      \"specialization\": \"Psychiatry\",\n      \"availability\": [\"Tuesday\", \"Thursday\"],\n      \"rating\": 4.9\n    }\n  ],\n  \"total\": 2,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /doctors/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/care/doctors/doctor_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "doctors", "doctor_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/care/doctors/doctor_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "doctors", "doctor_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"doctor\": {\n    \"id\": \"doctor_id\",\n    \"firstName\": \"Sarah\",\n    \"lastName\": \"Wilson\",\n    \"specialization\": \"Clinical Psychology\",\n    \"bio\": \"Experienced clinical psychologist with 10+ years...\",\n    \"availability\": [\"Monday\", \"Wednesday\", \"Friday\"],\n    \"contact\": {\n      \"email\": \"sarah.wilson@clinic.com\",\n      \"phone\": \"+1234567890\"\n    },\n    \"rating\": 4.8,\n    \"reviews\": 125\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /appointments (Patient)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": \"doctor_id\",\n  \"date\": \"2024-01-15\",\n  \"time\": \"10:00\",\n  \"reason\": \"Anxiety consultation\",\n  \"notes\": \"I've been experiencing anxiety attacks\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/care/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "appointments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/care/appointments",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "appointments"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Appointment booked successfully\",\n  \"appointment\": {\n    \"id\": \"appointment_id\",\n    \"doctorId\": \"doctor_id\",\n    \"patientId\": \"patient_id\",\n    \"date\": \"2024-01-15\",\n    \"time\": \"10:00\",\n    \"status\": \"scheduled\",\n    \"reason\": \"Anxiety consultation\",\n    \"createdAt\": \"2024-01-01T15:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /appointments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/care/appointments",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "appointments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/care/appointments",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "appointments"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"appointments\": [\n    {\n      \"id\": \"appointment1\",\n      \"doctor\": {\n        \"id\": \"doctor_id\",\n        \"firstName\": \"Sarah\",\n        \"lastName\": \"Wilson\"\n      },\n      \"date\": \"2024-01-15\",\n      \"time\": \"10:00\",\n      \"status\": \"scheduled\",\n      \"reason\": \"Anxiety consultation\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /appointments/:id/cancel (Patient)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/care/appointments/appointment_id/cancel",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "appointments", "appointment_id", "cancel"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/care/appointments/appointment_id/cancel",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "appointments", "appointment_id", "cancel"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Appointment cancelled successfully\",\n  \"appointment\": {\n    \"id\": \"appointment_id\",\n    \"status\": \"cancelled\",\n    \"cancelledAt\": \"2024-01-01T16:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /appointments/:id/complete (Doctor)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/care/appointments/appointment_id/complete",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "appointments", "appointment_id", "complete"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/care/appointments/appointment_id/complete",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "appointments", "appointment_id", "complete"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Appointment completed successfully\",\n  \"appointment\": {\n    \"id\": \"appointment_id\",\n    \"status\": \"completed\",\n    \"completedAt\": \"2024-01-01T17:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /prescriptions (Doctor)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"patientId\": \"patient_id\",\n  \"medication\": \"Sertraline 50mg\",\n  \"dosage\": \"Once daily\",\n  \"duration\": \"30 days\",\n  \"instructions\": \"Take with food in the morning\",\n  \"notes\": \"Follow up in 4 weeks\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/care/prescriptions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "prescriptions"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/care/prescriptions",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "prescriptions"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Prescription created successfully\",\n  \"prescription\": {\n    \"id\": \"prescription_id\",\n    \"patientId\": \"patient_id\",\n    \"doctorId\": \"doctor_id\",\n    \"medication\": \"Sertraline 50mg\",\n    \"dosage\": \"Once daily\",\n    \"duration\": \"30 days\",\n    \"instructions\": \"Take with food in the morning\",\n    \"createdAt\": \"2024-01-01T18:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /prescriptions/:userId",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/care/prescriptions/user_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "care", "prescriptions", "user_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/care/prescriptions/user_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "care", "prescriptions", "user_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"prescriptions\": [\n    {\n      \"id\": \"prescription1\",\n      \"medication\": \"Sertraline 50mg\",\n      \"dosage\": \"Once daily\",\n      \"duration\": \"30 days\",\n      \"doctor\": {\n        \"firstName\": \"Sarah\",\n        \"lastName\": \"Wilson\"\n      },\n      \"createdAt\": \"2024-01-01T18:00:00.000Z\"\n    }\n  ],\n  \"total\": 1,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Progress Service",
+      "description": "User mental health tracking and reports",
+      "item": [
+        {
+          "name": "GET /user/:id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/progress/user/user_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "progress", "user", "user_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/progress/user/user_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "progress", "user", "user_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"summary\": {\n    \"userId\": \"user_id\",\n    \"totalEntries\": 15,\n    \"lastEntry\": \"2024-01-01T10:00:00.000Z\",\n    \"moodAverage\": 7.2,\n    \"anxietyLevel\": 4.5,\n    \"sleepQuality\": 6.8,\n    \"progressTrend\": \"improving\"\n  },\n  \"lastWeek\": {\n    \"mood\": [6, 7, 8, 7, 8, 9, 7],\n    \"anxiety\": [5, 4, 3, 4, 3, 2, 4],\n    \"sleep\": [6, 7, 6, 8, 7, 8, 7]\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "POST /user/:id/entries (Patient/Therapist)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mood\": 8,\n  \"anxietyLevel\": 3,\n  \"sleepQuality\": 7,\n  \"medicationTaken\": true,\n  \"notes\": \"Feeling better today after morning walk\",\n  \"activities\": [\"walking\", \"meditation\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/progress/user/user_id/entries",
+              "host": ["{{base_url}}"],
+              "path": ["api", "progress", "user", "user_id", "entries"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/progress/user/user_id/entries",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "progress", "user", "user_id", "entries"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"message\": \"Progress entry added successfully\",\n  \"entry\": {\n    \"id\": \"entry_id\",\n    \"userId\": \"user_id\",\n    \"mood\": 8,\n    \"anxietyLevel\": 3,\n    \"sleepQuality\": 7,\n    \"medicationTaken\": true,\n    \"notes\": \"Feeling better today after morning walk\",\n    \"activities\": [\"walking\", \"meditation\"],\n    \"createdAt\": \"2024-01-01T19:00:00.000Z\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /user/:id/entries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/progress/user/user_id/entries",
+              "host": ["{{base_url}}"],
+              "path": ["api", "progress", "user", "user_id", "entries"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/progress/user/user_id/entries",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "progress", "user", "user_id", "entries"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"entries\": [\n    {\n      \"id\": \"entry1\",\n      \"mood\": 8,\n      \"anxietyLevel\": 3,\n      \"sleepQuality\": 7,\n      \"medicationTaken\": true,\n      \"createdAt\": \"2024-01-01T19:00:00.000Z\"\n    },\n    {\n      \"id\": \"entry2\",\n      \"mood\": 6,\n      \"anxietyLevel\": 5,\n      \"sleepQuality\": 6,\n      \"medicationTaken\": true,\n      \"createdAt\": \"2023-12-31T19:00:00.000Z\"\n    }\n  ],\n  \"total\": 2,\n  \"page\": 1,\n  \"limit\": 10\n}"
+            }
+          ]
+        },
+        {
+          "name": "PATCH /user/:id/entries/:entryId (Therapist)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"therapistNotes\": \"Patient showing good progress with new medication\",\n  \"recommendations\": \"Continue current regimen, add evening walk\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/progress/user/user_id/entries/entry_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "progress", "user", "user_id", "entries", "entry_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "PATCH",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/progress/user/user_id/entries/entry_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "progress", "user", "user_id", "entries", "entry_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Progress entry updated successfully\",\n  \"entry\": {\n    \"id\": \"entry_id\",\n    \"therapistNotes\": \"Patient showing good progress with new medication\",\n    \"recommendations\": \"Continue current regimen, add evening walk\",\n    \"updatedAt\": \"2024-01-01T20:00:00.000Z\",\n    \"updatedBy\": \"therapist_id\"\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "DELETE /user/:id/entries/:entryId (Therapist/Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/progress/user/user_id/entries/entry_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "progress", "user", "user_id", "entries", "entry_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/progress/user/user_id/entries/entry_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "progress", "user", "user_id", "entries", "entry_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"message\": \"Progress entry deleted successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "GET /reports/:id (Therapist/Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{auth_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/progress/reports/report_id",
+              "host": ["{{base_url}}"],
+              "path": ["api", "progress", "reports", "report_id"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{auth_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/progress/reports/report_id",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "progress", "reports", "report_id"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"report\": {\n    \"id\": \"report_id\",\n    \"userId\": \"user_id\",\n    \"period\": {\n      \"start\": \"2023-12-01\",\n      \"end\": \"2024-01-01\"\n    },\n    \"summary\": {\n      \"moodTrend\": \"improving\",\n      \"anxietyTrend\": \"decreasing\",\n      \"sleepTrend\": \"stable\",\n      \"medicationAdherence\": 95\n    },\n    \"recommendations\": [\n      \"Continue current treatment plan\",\n      \"Increase physical activity\",\n      \"Schedule follow-up in 2 weeks\"\n    ],\n    \"generatedAt\": \"2024-01-01T21:00:00.000Z\",\n    \"generatedBy\": \"therapist_id\"\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
