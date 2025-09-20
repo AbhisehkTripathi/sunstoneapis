@@ -1,53 +1,43 @@
 import { Request, Response, NextFunction } from "express";
-import * as jose from "node-jose";
 import { AppDataSource } from "../../config/database";
 import { User } from "../../app/models/user.schema";
-import fs from "fs";
+import { verifyToken } from "../../libs/jwt";
 
 const userRepository = AppDataSource.getRepository(User);
 
-// 🔹 Build keystore once at startup
-let keystore: jose.JWK.KeyStore;
-
-(async () => {
-  keystore = jose.JWK.createKeyStore();
-  // const privateKeyPem = Buffer.from(process.env.JWT_PRIVATE_KEY!, "base64").toString("utf-8");
-  const privateKeyPem = fs.readFileSync("./jwe_private.pem", "utf-8");
-
-  await keystore.add(privateKeyPem, "pem");
-})();
-
-export async function decryptAndVerifyJwt(req: Request, res: Response, next: NextFunction) {
+export async function decryptAndVerifyJwt(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const authHeader = req.headers.authorization;
 
-    if (!token) {
-      return res.status(401).send({ message: "No token provided." });
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Authorization token missing" });
     }
 
-    // Decrypt JWE with private key
-    const decryptedResult = await jose.JWE.createDecrypt(keystore).decrypt(token);
-    const decryptedPayload = JSON.parse(decryptedResult.payload.toString());
-    console.log("decryptedPayload",decryptedPayload)
-    // Exp check
-    if (Date.now() >= decryptedPayload.exp) {
-      return res.status(401).send({ message: "Token is expired, please login again." });
-    }
+    const token = authHeader.split(" ")[1];
 
-    // Lookup user
+    // 🔑 Decrypt & verify JWE
+    const payload = await verifyToken(token);
+    console.log("Decrypted JWE Payload:", payload);
+
+    // 🔎 Validate user
     const user = await userRepository.findOne({
-      where: { user_id: decryptedPayload.user_id },
-      select: ["user_id"],
+      where: { user_id: payload?.id },
     });
+
+
     if (!user) {
-      return res.status(401).send({ message: "User not found.", errorcode: 401 });
+      return res.status(401).json({ message: "User not found" });
     }
 
-    req.user = user;
+    // Attach user for controllers
+    (req as any).user = user;
     return next();
   } catch (err: any) {
     console.error("JWT verification failed:", err.message);
-    return res.status(401).send({ message: "Failed to authenticate token.", errorcode: 401 });
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 }
-

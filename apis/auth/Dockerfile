@@ -1,15 +1,11 @@
 FROM node:20-alpine
 
 WORKDIR /app
-
-# Copy package.json and install dependencies
 COPY package*.json ./
 
-# Install all dependencies (dev for dev mode)
 ARG NODE_ENV=development
 RUN if [ "$NODE_ENV" = "development" ]; then npm install; else npm install --production; fi
 
-# Copy source code
 COPY . .
 
 # Expose port

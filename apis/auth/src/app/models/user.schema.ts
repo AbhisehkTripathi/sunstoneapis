@@ -33,5 +33,11 @@ import {
   
     @CreateDateColumn({ type: "timestamp" })
     created_at: Date;
+
+    @Column({ type: "text" })
+    jwt_token: string;
+
+    @CreateDateColumn({ type: "timestamp" })
+    jwt_expires_at: Date;
   
   }

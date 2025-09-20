@@ -21,8 +21,9 @@ export const AppDataSource = new DataSource({
     entities: ['src/app/models/*.ts'],
     migrations: ['src/database/migrations/*.ts']
 })
+
 AppDataSource.initialize()
     .then(() => {
-      console.log("Database connected successfully")
+      console.log("Sunstone Auth Database connected successfully")
     })
     .catch((error) => console.log(error))
