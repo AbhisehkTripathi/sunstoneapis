@@ -4,7 +4,7 @@ dotenv.config();
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    host: 'postgres',
+    host: 'localhost',
     port: 5432,
     username: 'admin',
     password: 'admin',
@@ -21,8 +21,9 @@ export const AppDataSource = new DataSource({
     entities: ['src/app/models/*.ts'],
     migrations: ['src/database/migrations/*.ts']
 })
+
 AppDataSource.initialize()
     .then(() => {
-      console.log("Database connected successfully")
+      console.log("Sunstone Wellness Database connected successfully")
     })
     .catch((error) => console.log(error))
