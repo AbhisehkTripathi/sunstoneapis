@@ -1,8 +1,10 @@
-'use strict';
+import * as dotenv from "dotenv";
 
-exports.config = {
-  app_name: [process.env.NEW_RELIC_APP_NAME || "wellness"],
-  license_key: process.env.NEW_RELIC_LICENSE_KEY || "test",
+dotenv.config();
+
+export const config = {
+  app_name: [process.env.NEW_RELIC_APP_NAME || "my-app"],
+  license_key: process.env.NEW_RELIC_LICENSE_KEY || "",
   logging: {
     level: process.env.NEW_RELIC_LOG_LEVEL || "info",
   },

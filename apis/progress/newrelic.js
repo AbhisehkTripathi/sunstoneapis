@@ -1,8 +1,8 @@
 'use strict';
 
 exports.config = {
-  app_name: [process.env.NEW_RELIC_APP_NAME || "wellness"],
-  license_key: process.env.NEW_RELIC_LICENSE_KEY || "test",
+  app_name: [process.env.NEW_RELIC_APP_NAME || "progress"],
+  license_key: process.env.NEW_RELIC_LICENSE_KEY || "TEST",
   logging: {
     level: process.env.NEW_RELIC_LOG_LEVEL || "info",
   },
