@@ -5,15 +5,15 @@ scrape_configs:
   - job_name: 'auth'
     static_configs:
       - targets: ['auth:3001']
-  # - job_name: 'community'
-  #   static_configs:
-  #     - targets: ['community:3004']
-  # - job_name: 'wellness'
-  #   static_configs:
-  #     - targets: ['wellness:3002']
-  # - job_name: 'care'
-  #   static_configs:
-  #     - targets: ['care:3003']
-  # - job_name: 'progress'
-  #   static_configs:
-  #     - targets: ['progress:3005']
+  - job_name: 'community'
+    static_configs:
+      - targets: ['community:3004']
+  - job_name: 'wellness'
+    static_configs:
+      - targets: ['wellness:3002']
+  - job_name: 'care'
+    static_configs:
+      - targets: ['care:3003']
+  - job_name: 'progress'
+    static_configs:
+      - targets: ['progress:3005']
