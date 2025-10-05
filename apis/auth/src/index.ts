@@ -10,6 +10,7 @@ import { AppDataSource } from "./config/database";
 import userRoutes from "./routes/user.route";
 import { ApiLogMiddleware } from "./app/middlewares/ApiLogMiddleware";
 import { initKeys } from "./libs/jwt";
+import dailyWelcomeQuotesRoutes from "./routes/dailywelcomequotes.route";
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ app.use(ApiLogMiddleware("auth-api"));
 
 // Routes
 app.use("/user", userRoutes);
+app.use("/quotes", dailyWelcomeQuotesRoutes);
 
 app.get("/health-check", (req, res) => {
   res.json({ 

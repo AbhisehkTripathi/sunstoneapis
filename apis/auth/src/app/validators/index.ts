@@ -1,7 +1,19 @@
-import { registerSchema, loginSchema, refreshTokenSchema } from "./user.validator";
-
-export default module.exports = {
+// src/validators/index.ts
+import {
     registerSchema,
     loginSchema,
-    refreshTokenSchema
-}
+    refreshTokenSchema,
+    logoutSchema,
+    profileUpdateSchema,
+  } from "./user.validator";
+  
+  const Validators = {
+    registerSchema,
+    loginSchema,
+    refreshTokenSchema,
+    logoutSchema,
+    profileUpdateSchema,
+  };
+  
+  export default Validators;
+  

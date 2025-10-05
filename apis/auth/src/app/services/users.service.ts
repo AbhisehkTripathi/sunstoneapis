@@ -39,5 +39,17 @@ export class UserService {
       select: ["user_id", "name", "email"],
     });
   }
-  
+
+  async logout(id: string) {
+    // return await this.UserRepo.update({user_id: id}, {jwt_token: null, jwt_expires_at: null});
+    const logoutUser = await this.UserRepo.findOne({ where: { user_id: id } });
+    if (!logoutUser) {
+      throw new Error("User not found");
+    }
+    return await this.UserRepo.update({user_id: id}, {jwt_token: null, jwt_expires_at: null});
+  }
+
+  async pateintUpdate(id: string, data: any) {
+    return await this.UserRepo.update({user_id: id}, {name: data.name, email: data.email});
+  }
 }
