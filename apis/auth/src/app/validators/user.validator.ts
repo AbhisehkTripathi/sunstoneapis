@@ -17,3 +17,13 @@ export const loginSchema = Joi.object({
 export const refreshTokenSchema = Joi.object({
   user_id: Joi.string().required(),
 });
+
+export const logoutSchema = Joi.object({
+  user_id: Joi.number().required(),
+});
+
+export const profileUpdateSchema = Joi.object({
+  id: Joi.string().required(),
+  name: Joi.string().optional().allow(""),
+  email: Joi.string().email().optional(),
+});

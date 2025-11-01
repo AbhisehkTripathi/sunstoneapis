@@ -135,5 +135,28 @@ export default class UserController extends Controller {
       return errorResponse(res, 500, "Internal Server Error", err.message);
     }
   }
+
+  static async logout(req: Request, res: Response) {
+    try {
+      const service = new UserService();
+      const user = await service.logout(req.body.user_id);
+     
+      
+      return successResponse(res, 200, "Logout successful", ["User logged out successfully"]);
+    } catch (err: any) {
+      return errorResponse(res, 500, "Internal Server Error", err.message);
+    }
+  }
+
+  static async profileUpdate(req: Request, res: Response){
+    try {
+      const service = new UserService();
+      const user = await service.pateintUpdate(req.params.id, req.body);
+      
+      return successResponse(res, 200, "Profile updated successfully",["Profile updated successfully"]);
+    } catch (err: any) {
+      return errorResponse(res, 500, "Internal Server Error", err.message);
+    }
+  }
   
 }

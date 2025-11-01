@@ -10,6 +10,8 @@ import { AppDataSource } from "./config/database";
 import userRoutes from "./routes/user.route";
 import { ApiLogMiddleware } from "./app/middlewares/ApiLogMiddleware";
 import { initKeys } from "./libs/jwt";
+import dailyWelcomeQuotesRoutes from "./routes/dailywelcomequotes.route";
+import PayloadChecksumMiddleware from "./app/middlewares/PayloadChecksumMiddleware";
 
 dotenv.config();
 
@@ -40,6 +42,9 @@ app.use(cors(corsOptions));
 // Handle preflight requests for all routes
 app.options("*", cors(corsOptions));
 
+// Payload checksum middleware
+// app.use(PayloadChecksumMiddleware);
+
 // Security headers
 app.use(helmet());
 app.use(
@@ -56,6 +61,7 @@ app.use(ApiLogMiddleware("auth-api"));
 
 // Routes
 app.use("/user", userRoutes);
+app.use("/quotes", dailyWelcomeQuotesRoutes);
 
 app.get("/health-check", (req, res) => {
   res.json({ 

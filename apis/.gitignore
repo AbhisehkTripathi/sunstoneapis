@@ -24,7 +24,7 @@ error.log
 # Database (local/dev)
 *.sqlite
 *.db
-
+SupabaseInfo.txt
 # Docker
 .docker/
 docker-data/
