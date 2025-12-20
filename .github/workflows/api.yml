@@ -1,4 +1,4 @@
-name: Auth Service CI/CD
+name: API Services CI/CD
 
 on:
   push:
@@ -7,28 +7,108 @@ on:
       - develop
     paths:
       - 'apis/auth/**'
+      - 'apis/care/**'
+      - 'apis/community/**'
+      - 'apis/progress/**'
+      - 'apis/wellness/**'
   pull_request:
     branches:
       - main
       - develop
     paths:
       - 'apis/auth/**'
+      - 'apis/care/**'
+      - 'apis/community/**'
+      - 'apis/progress/**'
+      - 'apis/wellness/**'
   workflow_dispatch:
+    inputs:
+      service:
+        description: 'Service to build and deploy'
+        required: true
+        type: choice
+        options:
+          - auth
+          - care
+          - community
+          - progress
+          - wellness
 
 env:
-  AZURE_WEBAPP_NAME: auth-service
   AZURE_RESOURCE_GROUP: sunstone-mind-rg
   AZURE_CONTAINER_REGISTRY: sunstonemindacr
-  DOCKER_IMAGE_NAME: auth-service
   NODE_VERSION: '20'
 
 jobs:
-  test:
-    name: Run Tests
+  detect-changes:
+    name: Detect Changed Services
     runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.changes.outputs.services }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed services
+        id: changes
+        run: |
+          SERVICES="auth care community progress wellness"
+          CHANGED_SERVICES=""
+          
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            CHANGED_SERVICES="${{ github.event.inputs.service }}"
+          elif [ "${{ github.event_name }}" == "pull_request" ]; then
+            # For PRs, compare against the base branch
+            BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            HEAD_SHA="${{ github.sha }}"
+            for service in $SERVICES; do
+              if git diff --name-only $BASE_SHA $HEAD_SHA | grep -q "^apis/$service/"; then
+                if [ -z "$CHANGED_SERVICES" ]; then
+                  CHANGED_SERVICES="$service"
+                else
+                  CHANGED_SERVICES="$CHANGED_SERVICES $service"
+                fi
+              fi
+            done
+          else
+            # For pushes, check changed files
+            if [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+              for service in $SERVICES; do
+                if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^apis/$service/"; then
+                  if [ -z "$CHANGED_SERVICES" ]; then
+                    CHANGED_SERVICES="$service"
+                  else
+                    CHANGED_SERVICES="$CHANGED_SERVICES $service"
+                  fi
+                fi
+              done
+            else
+              # If before SHA is not available, check all services
+              CHANGED_SERVICES="$SERVICES"
+            fi
+          fi
+          
+          if [ -z "$CHANGED_SERVICES" ]; then
+            # If no specific changes detected, check all services
+            CHANGED_SERVICES="$SERVICES"
+          fi
+          
+          echo "services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT
+          echo "Changed services: $CHANGED_SERVICES"
+
+  test:
+    name: Run Tests - ${{ matrix.service }}
+    runs-on: ubuntu-latest
+    needs: detect-changes
+    if: contains(needs.detect-changes.outputs.services, matrix.service) || github.event_name == 'workflow_dispatch'
+    strategy:
+      matrix:
+        service: [auth, care, community, progress, wellness]
     defaults:
       run:
-        working-directory: ./apis/auth
+        working-directory: ./apis/${{ matrix.service }}
 
     services:
       postgres:
@@ -54,7 +134,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: apis/auth/package-lock.json
+          cache-dependency-path: apis/${{ matrix.service }}/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -82,7 +162,7 @@ jobs:
           # Automatically discovers and runs all Postman collections (*.postman_collection.json) in tests/postman/
           # Any new Postman collection added will be automatically discovered and executed
           # Looks for matching environment files (*.postman_environment.json) with same base name
-          COLLECTIONS=$(find tests/postman -name "*.postman_collection.json" -type f)
+          COLLECTIONS=$(find tests/postman -name "*.postman_collection.json" -type f 2>/dev/null || true)
           
           if [ -z "$COLLECTIONS" ]; then
             echo "No Postman collections found"
@@ -126,18 +206,22 @@ jobs:
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-results
+          name: test-results-${{ matrix.service }}
           path: |
-            apis/auth/test-results/**/*
-            apis/auth/coverage/**/*
+            apis/${{ matrix.service }}/test-results/**/*
+            apis/${{ matrix.service }}/coverage/**/*
 
   build:
-    name: Build Docker Image
+    name: Build Docker Image - ${{ matrix.service }}
     runs-on: ubuntu-latest
-    needs: test
+    needs: [detect-changes, test]
+    if: contains(needs.detect-changes.outputs.services, matrix.service) || github.event_name == 'workflow_dispatch'
+    strategy:
+      matrix:
+        service: [auth, care, community, progress, wellness]
     defaults:
       run:
-        working-directory: ./apis/auth
+        working-directory: ./apis/${{ matrix.service }}
 
     steps:
       - name: Checkout code
@@ -157,7 +241,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DOCKER_IMAGE_NAME }}
+          images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ matrix.service }}-service
           tags: |
             type=ref,event=branch
             type=ref,event=pr
@@ -169,20 +253,23 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./apis/auth
+          context: ./apis/${{ matrix.service }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DOCKER_IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DOCKER_IMAGE_NAME }}:buildcache,mode=max
+          cache-from: type=registry,ref=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ matrix.service }}-service:buildcache
+          cache-to: type=registry,ref=${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ matrix.service }}-service:buildcache,mode=max
           build-args: |
             NODE_ENV=production
 
   deploy:
-    name: Deploy to Azure Web App
+    name: Deploy to Azure Web App - ${{ matrix.service }}
     runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    needs: [detect-changes, build]
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && (contains(needs.detect-changes.outputs.services, matrix.service) || github.event_name == 'workflow_dispatch')
+    strategy:
+      matrix:
+        service: [auth, care, community, progress, wellness]
     environment:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
@@ -198,11 +285,10 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          app-name: ${{ matrix.service }}-service
           resource-group: ${{ env.AZURE_RESOURCE_GROUP }}
-          images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.DOCKER_IMAGE_NAME }}:latest
+          images: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ matrix.service }}-service:latest
           startup-command: 'npm start'
 
       - name: Azure logout
         run: az logout
-
