@@ -6,6 +6,7 @@ const route = express.Router();
 import { asyncHandler } from "../utils/asyncHandler";
 
 
+route.post("/loginlll", Validator("loginSchema"), asyncHandler(UserController.login));
 route.post("/register", Validator("registerSchema"), asyncHandler(UserController.register));
 route.post("/login", Validator("loginSchema"), asyncHandler(UserController.login));
 route.patch("/logout", decryptAndVerifyJwt,Validator("logoutSchema"), asyncHandler(UserController.logout));
