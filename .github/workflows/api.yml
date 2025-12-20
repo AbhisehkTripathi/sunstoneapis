@@ -428,6 +428,9 @@ jobs:
       matrix:
         service: [auth, care, community, progress, wellness]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+
     steps:
       - name: Check if service should run
         id: check
@@ -452,14 +455,13 @@ jobs:
         run: |
           echo "Service ${{ matrix.service }} was not changed, skipping deployment"
           exit 0
-    environment:
-      name: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
 
-    steps:
       - name: Checkout code
+        if: steps.check.outputs.should_run == 'true'
         uses: actions/checkout@v4
 
       - name: Login to Azure
+        if: steps.check.outputs.should_run == 'true'
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
