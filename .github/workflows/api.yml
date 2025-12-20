@@ -6,13 +6,13 @@ on:
       - main
       - develop
     paths:
-      - 'auth/**'
+      - 'apis/auth/**'
   pull_request:
     branches:
       - main
       - develop
     paths:
-      - 'auth/**'
+      - 'apis/auth/**'
   workflow_dispatch:
 
 env:
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./auth
+        working-directory: ./apis/auth
 
     services:
       postgres:
@@ -54,7 +54,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: auth/package-lock.json
+          cache-dependency-path: apis/auth/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -128,8 +128,8 @@ jobs:
         with:
           name: test-results
           path: |
-            auth/test-results/**/*
-            auth/coverage/**/*
+            apis/auth/test-results/**/*
+            apis/auth/coverage/**/*
 
   build:
     name: Build Docker Image
@@ -137,7 +137,7 @@ jobs:
     needs: test
     defaults:
       run:
-        working-directory: ./auth
+        working-directory: ./apis/auth
 
     steps:
       - name: Checkout code
@@ -169,7 +169,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./auth
+          context: ./apis/auth
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

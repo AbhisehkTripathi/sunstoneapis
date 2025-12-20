@@ -6,6 +6,6 @@ import { Validator } from "../app/middlewares/ValidatorMiddleware";
 const route = express.Router();
 import { asyncHandler } from "../utils/asyncHandler";
 
-route.get('/daily-welcome-quotes', decryptAndVerifyJwt, asyncHandler(QuotesController.dailyWelcomeQuotes));
+route.get('/daily-welcomess-quotes', decryptAndVerifyJwt, asyncHandler(QuotesController.dailyWelcomeQuotes));
 
 export default route;
