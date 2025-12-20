@@ -227,9 +227,6 @@ jobs:
     strategy:
       matrix:
         service: [auth, care, community, progress, wellness]
-    defaults:
-      run:
-        working-directory: ./apis/${{ matrix.service }}
 
     steps:
       - name: Checkout code
