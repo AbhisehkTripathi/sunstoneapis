@@ -25,6 +25,8 @@ app.use(ApiLogMiddleware("wellness-api"));
 
 app.use("/wellness", wellnessRoutes);
 
+
+
 app.get("/health-check", (req, res) => {
   res.json({ status: "health-check", service: "wellness-api", time: new Date().toISOString() });
 });
