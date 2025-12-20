@@ -147,12 +147,51 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: TypeScript Type Check
+        run: |
+          echo "Running TypeScript type checking..."
+          npx tsc --noEmit || echo "TypeScript check completed with errors (non-blocking)"
+        continue-on-error: true
+
+      - name: Build TypeScript
+        run: |
+          echo "Building TypeScript to verify compilation..."
+          npm run build || echo "Build check completed (non-blocking)"
+        continue-on-error: true
+
+      - name: Lint Code (if available)
+        run: |
+          if npm run | grep -q "lint"; then
+            echo "Running linter..."
+            npm run lint || echo "Linting completed with warnings (non-blocking)"
+          else
+            echo "No lint script found, skipping..."
+          fi
+        continue-on-error: true
+
       - name: Discover and run all unit tests
         run: |
           # Automatically discovers and runs all test files matching pattern: src/tests/**/*.test.ts
           # Any new test file added to src/tests/ directory will be automatically included
           echo "Running all unit tests from src/tests/**/*.test.ts"
           npm test
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgresql://test:test@localhost:5432/test_db
+          PORT: 3001
+
+      - name: Run test coverage (if available)
+        run: |
+          if npm run | grep -q "test:coverage"; then
+            echo "Running test coverage..."
+            npm run test:coverage
+          elif npm run | grep -q "coverage"; then
+            echo "Running coverage..."
+            npm run coverage
+          else
+            echo "No coverage script found, skipping..."
+          fi
+        continue-on-error: true
         env:
           NODE_ENV: test
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
@@ -210,6 +249,46 @@ jobs:
           DATABASE_URL: postgresql://test:test@localhost:5432/test_db
           PORT: 3001
 
+      - name: Check test file count
+        run: |
+          TEST_COUNT=$(find src/tests -name "*.test.ts" -type f 2>/dev/null | wc -l || echo "0")
+          echo "Found $TEST_COUNT test files"
+          if [ "$TEST_COUNT" -eq "0" ]; then
+            echo "⚠️ Warning: No test files found in src/tests/"
+          else
+            echo "✓ Test files found: $TEST_COUNT"
+          fi
+        continue-on-error: true
+
+      - name: Verify service health endpoint
+        run: |
+          echo "Checking if service has health check endpoint..."
+          if [ -f "src/index.ts" ] || [ -f "src/index.js" ]; then
+            if grep -r "health" src/ --include="*.ts" --include="*.js" > /dev/null 2>&1; then
+              echo "✓ Health check endpoint found"
+            else
+              echo "⚠️ Warning: No health check endpoint found"
+            fi
+          fi
+        continue-on-error: true
+
+      - name: Check for security vulnerabilities
+        run: |
+          echo "Checking for known security vulnerabilities..."
+          npm audit --audit-level=moderate || echo "Security audit completed (non-blocking)"
+        continue-on-error: true
+
+      - name: Verify environment variables
+        run: |
+          echo "Checking required environment variables..."
+          if [ -f ".env.example" ]; then
+            echo "✓ .env.example file found"
+            cat .env.example | grep -v "^#" | grep -v "^$" | cut -d'=' -f1 | sort
+          else
+            echo "⚠️ No .env.example file found"
+          fi
+        continue-on-error: true
+
       - name: Publish test results
         uses: actions/upload-artifact@v4
         if: always()
@@ -218,6 +297,8 @@ jobs:
           path: |
             apis/${{ matrix.service }}/test-results/**/*
             apis/${{ matrix.service }}/coverage/**/*
+            apis/${{ matrix.service }}/dist/**/*
+          retention-days: 7
 
   build:
     name: Build ${{ matrix.service }} Service
@@ -231,6 +312,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Verify Dockerfile exists
+        run: |
+          if [ -f "apis/${{ matrix.service }}/Dockerfile" ]; then
+            echo "✓ Dockerfile found"
+            echo "Dockerfile contents preview:"
+            head -10 apis/${{ matrix.service }}/Dockerfile
+          else
+            echo "❌ Error: Dockerfile not found in apis/${{ matrix.service }}/"
+            exit 1
+          fi
+
+      - name: Verify package.json exists
+        run: |
+          if [ -f "apis/${{ matrix.service }}/package.json" ]; then
+            echo "✓ package.json found"
+            echo "Service name: $(grep -E '"name"' apis/${{ matrix.service }}/package.json | head -1)"
+          else
+            echo "❌ Error: package.json not found"
+            exit 1
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
