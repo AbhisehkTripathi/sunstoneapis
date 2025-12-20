@@ -1,8 +1,8 @@
 'use strict';
 
 exports.config = {
-  app_name: [process.env.NEW_RELIC_APP_NAME || "sunstone-mind-auth"],
-  license_key: process.env.NEW_RELIC_LICENSE_KEY || "eu01xxb0e09f800a85645982434db022FFFFNRAL",
+  app_name: [process.env.NEW_RELIC_APP_NAME || "auth"],
+  license_key: process.env.NEW_RELIC_LICENSE_KEY || "test",
   logging: {
     level: process.env.NEW_RELIC_LOG_LEVEL || "info",
   },

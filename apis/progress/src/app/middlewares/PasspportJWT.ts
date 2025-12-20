@@ -7,13 +7,13 @@ const userRepository = AppDataSource.getRepository(User);
 
 
 const jwtOptions: passportJWT.StrategyOptions = {
-  jwtFromRequest: ExtractJwt.fromprogressHeaderAsBearerToken(),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET_KEY||'',
 };
 
 passport.use(new JWTStrategy(jwtOptions,async (jwtPayload, done) => {
     try{
-        const user = await userRepository.findOne({where: {id: jwtPayload.id}});
+        const user = await userRepository.findOne({where: {user_id: jwtPayload.id}});
         if (!user) {
             return done(null, false, { message: 'Incorrect username or password.' });
         }
@@ -25,4 +25,4 @@ passport.use(new JWTStrategy(jwtOptions,async (jwtPayload, done) => {
     }
 }));
 
-export const passportJwt = passport.progressenticate('jwt', { session: false });
+export const passportJwt = passport.authenticate('jwt', { session: false });

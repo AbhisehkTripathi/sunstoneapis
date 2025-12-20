@@ -6,6 +6,8 @@ services:
     container_name: auth
     ports:
       - "3001:3000"
+    env_file:
+      - ./auth/.env
     networks:
       - backend
 
@@ -15,6 +17,8 @@ services:
     container_name: wellness
     ports:
       - "3002:3000"
+    env_file:
+      - ./wellness/.env
     networks:
       - backend
 
@@ -23,6 +27,8 @@ services:
     container_name: care
     ports:
       - "3003:3000"
+    env_file:
+      - ./care/.env
     networks:
       - backend
 
@@ -31,6 +37,8 @@ services:
     container_name: community
     ports:
       - "3004:3000"
+    env_file:
+      - ./community/.env
     networks:
       - backend
 
@@ -39,6 +47,8 @@ services:
     container_name: progress
     ports:
       - "3005:3000"
+    env_file:
+      - ./progress/.env
     networks:
       - backend
   postgres:

@@ -4,11 +4,11 @@ dotenv.config();
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'admin',
-    password: 'admin',
-    database: 'sunstonemind',
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     synchronize: false,
     logging: true,
     ssl: false,
@@ -18,10 +18,16 @@ export const AppDataSource = new DataSource({
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 20000,
     },
-    entities: ['src/app/models/*.ts'],
-    migrations: ['src/database/migrations/*.ts']
+    ...(process.env.NODE_ENV === 'production' ? {
+      entities: ['dist/app/models/*.js'],
+      migrations: ['dist/database/migrations/*.js']
+    } : {
+      entities: ['src/app/models/*.ts'],
+      migrations: ['src/database/migrations/*.ts']
+    })
 })
 
+// console.log("Sunstone Auth Database initializing...",process.env.DB_HOST,process.env.DB_PORT,process.env.DB_USER,process.env.DB_PASSWORD,process.env.DB_NAME)
 AppDataSource.initialize()
     .then(() => {
       console.log("Sunstone Auth Database connected successfully")

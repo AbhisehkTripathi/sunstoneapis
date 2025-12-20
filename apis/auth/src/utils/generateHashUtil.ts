@@ -1,3 +1,4 @@
+// utils/generateHashUtil.ts
 import jsSHA from 'jssha';
 
 export function generateHashUtil(url: string, payload: any, method: string): string {

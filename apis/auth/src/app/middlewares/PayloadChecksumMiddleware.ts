@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import jsSHA from "jssha";
 import * as url from "url";
-import Helper from "../../utils/helper";
+import Helper from "../../utils/helper"
+
 const PayloadChecksumMiddleware = (
     request: Request,
     response: Response,
@@ -10,6 +11,9 @@ const PayloadChecksumMiddleware = (
     try {
         const exceptionRoutes: any = Helper.getExceptioalRoutes();
         const parsedUrl: any = url.parse(request.url, true);
+        // const isExceptionRoute = exceptionRoutes.some((route: string) =>
+        //     parsedUrl.pathname?.includes(route)
+        // );\
         const isExceptionRoute = exceptionRoutes.filter((route: string) =>
             parsedUrl.pathname?.includes(route)
         ).length > 0;
@@ -41,6 +45,12 @@ const PayloadChecksumMiddleware = (
             finalText = parsedUrlText + process.env.SALT_KEY;
         }
         sha.update(finalText);
+        const hash = sha.getHash("HEX");
+        if (request.headers['x-verify'] != hash) {
+            return response.status(422).json({
+                error_message: "Unprocessable Content"
+            });
+        }
 
         next();
     } catch (e) {
@@ -51,4 +61,3 @@ const PayloadChecksumMiddleware = (
 }
 
 export default PayloadChecksumMiddleware;
-

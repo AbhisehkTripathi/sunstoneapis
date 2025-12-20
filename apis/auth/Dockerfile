@@ -1,22 +1,25 @@
 FROM node:20-alpine
 
 WORKDIR /app
+
+# Copy package files
 COPY package*.json ./
 
-ARG NODE_ENV=development
-RUN if [ "$NODE_ENV" = "development" ]; then npm install; else npm install --production; fi
+# Install dependencies
+ARG NODE_ENV=production
+RUN npm ci --only=production && npm cache clean --force
 
+# Copy source code
 COPY . .
 
+# Build TypeScript
+RUN npm run build
+
 # Expose port
-EXPOSE 3000
+EXPOSE 3001
 
-# Default environment
-ENV NODE_ENV=development
+# Set environment
+ENV NODE_ENV=production
 
-# Run command based on NODE_ENV
-CMD if [ "$NODE_ENV" = "development" ]; then \
-        npm run dev; \
-    else \
-        npm run build && npm run start; \
-    fi
+# Start the application
+CMD ["npm", "start"]
